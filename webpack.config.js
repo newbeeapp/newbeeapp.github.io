@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-var OfflinePlugin = require('offline-plugin');
+var WorkboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -16,8 +16,9 @@ module.exports = {
         use: [
           'vue-style-loader',
           'css-loader'
-        ],
-      },      {
+        ]
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -56,13 +57,12 @@ module.exports = {
   },
   devtool: '#eval-source-map',
   plugins: [
-    new OfflinePlugin({
-      caches: 'all',
-      responseStrategy: 'cache-first',
-      externals: [
-        '/'
-      ],
-      appShell: '/'
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'sw.js',
+      cacheId: 'newbee',
+      clientsClaim: true,
+      skipWaiting: true,
+      importWorkboxFrom: 'local'
     })
   ]
 }
